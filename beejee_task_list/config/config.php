@@ -14,6 +14,6 @@ Config::set('default_controller', 'pages');
 Config::set('default_action', 'index');
 // Db settings
 Config::set('db.host', 'localhost');
-Config::set('db.user', 'seiz');
-Config::set('db.password', 'rhtvtyxeu');
-Config::set('db.db_name', 'seiz');
+Config::set('db.user', '');
+Config::set('db.password', '');
+Config::set('db.db_name', '');
