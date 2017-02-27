@@ -12,7 +12,7 @@ $cat->meow () === 'Cat garfield is saying meow' // true;
 */
 
 abstract class Animal{
-    protected $name;
+    private $name;
 
     function __construct($name = null) {
         $this->name = $name;
