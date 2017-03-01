@@ -1,0 +1,122 @@
+﻿1. MySQL (решение рабочее, думаю можно лучше):
+
+SELECT DISTINCT nt1.item_id as Item1, nt2.item_id as Item2
+FROM
+(Select t1.user_id, t2.user_id as user_id_2 , t2.item_id
+from orders as t1, orders  as t2
+WHERE t1.item_id = t2.item_id and t1.user_id < t2.user_id) AS nt1
+JOIN
+(Select t1.user_id, t2.user_id as user_id_2 , t2.item_id
+from orders as t1, orders  as t2
+WHERE t1.item_id = t2.item_id and t1.user_id < t2.user_id) AS nt2
+ON nt1.user_id = nt2.user_id
+WHERE nt1.item_id < nt2.item_id AND nt1.user_id_2 = nt2.user_id_2
+
+2. Общие навыки / PHP
+
+2.1. имеем таблицы БД (возможно решено)
+ - products
+    ID
+    name
+    status
+ - prices
+    product_id -> products.id
+    type - INT, тип цены (опт, vip...)
+    price - цена
+Задача Нужно сформировать прайс при таких условиях:
+    - всего в БД 100'000 товаров с ценами
+    - для прайса выбираются 10'000 товаров (по признаку status = 1)
+    - в прайс по каждому товару нужно вывести 4 заданных цены (т.е. типы цен 1,2,3,5)
+Интересует код для выборки этих данных из БД, и формирования массива со всей готовой информацией. Обратить внимание на скорость работы кода.
+
+CREATE INDEX IndName ON Products (name);
+SELECT DISTINCT prod.name, pr.type  LIMIT 10000
+FROM Products AS prod
+JOIN Prices AS pr
+ON prod.ID = pr.product_id
+WHERE prod.status = 1;
+
+Не сильно понял задание, что надо вывести.
+
+2.2. Имеем такой код (решено)
+$a = '1';
+$b = &$a;
+$b = "2$b";
+Чему будет $a и $b? Почему?
+
+$b = &$a;
+И так сначала $b будет равно значению $a (точнее ссылке на значение)  // в примере $b будет "1"
+$b = "2$b";
+Дальше $b будет равняться строке "2" плюс конкатенация значения $b.   // в примере $b будет  "21"
+И так как $b это ссылка на $a то и $a измениться и будет равна $b.    // в примере $a тоже будет "21"
+Объяснил как смог)
+
+2.3. Что не так в этом запросе? (решено)
+"SELECT * FROM table WHERE id = $_POST[ 'id' ]"
+лишние кавычки вокруг id
+правильная строка
+"SELECT * FROM table WHERE id = $_POST[ id ]"
+
+2.4. Что не так в этом классе? (решено)
+
+class SomeClass
+{
+    protected $_someMember;
+
+    public function __construct()
+    {
+        $this->_someMember = 1;
+    }
+
+    public static function getSomethingStatic()
+    {
+        return $this->_someMember * 5;
+    }
+}
+
+Не так в этом классе то что в статическом методе есть $this->_someMember, статическим методам недоступны свойства класса.
+
+3. Javascript / Ajax / PHP (не выполнено)
+Задача 1
+При выборе регионов подгружать с сервера (без перезагрузки всей страницы) города соотв. этим регионам,
+и вложенным по дереву в них, и подставлять их в список с городами
+Задача 2
+к "задаче 1" добавить функционал: при выборе региона(ов), автоматически выделять все вложенные в них регионы, а затем подгружать города
+Интересует весь код который реализует заданный функционал. Обертку для PHP, HTML можно опустить.
+
+Задача 1: (решение если это можно так назвать)
+Теоретически надо послать Ajax запрос на сервер, который будет готов принять и обработать наш запрос
+(код php который вытянет нужную нам информацию с БД).
+Задача 2:
+Теоретически для выделения используем JQuery, подгрузка городов опять Ajax.
+
+4. Регулярные выражения (вроде решено)
+Имеем HTML-код, пришедший от пользователя с wysiwyg редактора
+Задача 1 Очистить код от всех тегов кроме <b ..><i ...><strong ...><p ...><a...>,
+избавиться от всех основных javascript вставок (onclick= и другие)
+Задача 2 В полученном тексте проверить теги на закрытие в нужном порядке
+
+Решение задачи 1:
+$jsEvents = array('onclick=', 'ondblclick=', 'onkeypress='); // и т.д.
+$str = strip_tags($str,"<b><i><strong><p><a>"); // убираем все теги кроме тех что во втором аргументе
+$str = str_replace($jsEvents, "", $str);        // убираем js события (описанные в переменной $jsEvents)
+
+Решение задачи 2:
+function checkRightTags($str)
+{
+    $result = true;
+    preg_match_all('|<([^>]*)>|is', $str, $tags);
+    for ($i = 0, $len = count($tags[1]); $i < $len - 1; $i += 2) {
+        if ('/' . substr($tags[1][$i], 0, 1) == substr($tags[1][$i + 1], 0, 2)) {
+            $result = true;
+        } else {
+            $result = false;
+        }
+    }
+    return $result;
+}
+
+var_dump(checkRightTags('<a href=\"http://art.com\">Разр</a><i></i><b></p><b></p>'));
+
+ссылка на задание
+https://docs.google.com/document/d/1QKN2XTawWyBzOvBfGfNZ-KxSdKb6gQMBWIRdaysSvDo
