@@ -41,11 +41,10 @@ include_once 'dbconnect.php';
 
 <?php if (isset($_SESSION['usr_id'])) { ?>
 	<div class="well">
-		<h1>Ты кто такой?</h1>
-		<p><h2>Я пользователь <b><?php echo $_SESSION['usr_name']; ?></b>!</h2></p>
+		<h1>You are logged in as <b><?php echo $_SESSION['usr_name']; ?></b>!</h1>
 		<p>
 			<a class="btn btn-primary btn-large" href="logout.php">
-				Давай до свидания!
+				Logout!
 			</a>
 		</p>
 	</div>

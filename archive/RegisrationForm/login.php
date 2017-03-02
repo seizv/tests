@@ -18,7 +18,7 @@ if (isset($_POST['login'])) {
 		$_SESSION['usr_name'] = $row['name'];
 		header("Location: index.php");
 	} else {
-		$errormsg = "Incorrect Login or Password!!!";
+		$errorMsg = "Incorrect Login or Password!!!";
 	}
 }
 ?>
@@ -76,7 +76,7 @@ if (isset($_POST['login'])) {
 					</div>
 				</fieldset>
 			</form>
-			<span class="text-danger"><?php if (isset($errormsg)) { echo $errormsg; } ?></span>
+			<span class="text-danger"><?php if (isset($errorMsg)) { echo $errorMsg; } ?></span>
 		</div>
 	</div>
 	<div class="row">

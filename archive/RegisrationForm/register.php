@@ -14,31 +14,31 @@ $error = false;
 if (isset($_POST['signup'])) {
 	$name = mysqli_real_escape_string($con, $_POST['name']);
 	$password = mysqli_real_escape_string($con, $_POST['password']);
-	$cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
+	$cPassword = mysqli_real_escape_string($con, $_POST['cpassword']);
 
 	$result = mysqli_query($con, "SELECT name FROM usersNew WHERE name='{$name}'");
 	if($result->num_rows > 0){
-		$errormsg = "Name <b>{$name}</b> is already used";
+		$errorMsg = "Name <b>{$name}</b> is already used";
 		$result->close();
 	} else{
 		//name can contain only alpha characters and space
 		if (!preg_match("/^[a-zA-Z ]+$/",$name)) {
 			$error = true;
-			$name_error = "Name must contain only alphabets and space";
+			$nameError = "Name must contain only alphabets and space";
 		}
 		if(strlen($password) < 6) {
 			$error = true;
-			$password_error = "Password must be minimum of 6 characters";
+			$passwordError = "Password must be minimum of 6 characters";
 		}
-		if($password != $cpassword) {
+		if($password != $cPassword) {
 			$error = true;
-			$cpassword_error = "Password and Confirm Password doesn't match";
+			$cPasswordError = "Password and Confirm Password doesn't match";
 		}
 		if (!$error) {
 			if(mysqli_query($con, "INSERT INTO usersNew (name,password) VALUES('" . $name . "', '" . md5($password) . "')")) {
-				$successmsg = "Successfully Registered! <a href='login.php'>Click here to Login</a>";
+				$successMsg = "Successfully Registered! <a href='login.php'>Click here to Login</a>";
 			} else {
-				$errormsg = "Error in registering...Please try again later!";
+				$errorMsg = "Error in registering...Please try again later!";
 			}
 		}
 	}
@@ -88,19 +88,19 @@ if (isset($_POST['signup'])) {
 					<div class="form-group">
 						<label for="name">Name</label>
 						<input type="text" name="name" placeholder="Enter Name" required value="<?php if($error) echo $name; ?>" class="form-control" />
-						<span class="text-danger"><?php if (isset($name_error)) echo $name_error; ?></span>
+						<span class="text-danger"><?php if (isset($nameError)) echo $nameError; ?></span>
 					</div>
 
 					<div class="form-group">
 						<label for="name">Password</label>
 						<input type="password" name="password" placeholder="Password" required class="form-control" />
-						<span class="text-danger"><?php if (isset($password_error)) echo $password_error; ?></span>
+						<span class="text-danger"><?php if (isset($passwordError)) echo $passwordError; ?></span>
 					</div>
 
 					<div class="form-group">
 						<label for="name">Confirm Password</label>
 						<input type="password" name="cpassword" placeholder="Confirm Password" required class="form-control" />
-						<span class="text-danger"><?php if (isset($cpassword_error)) echo $cpassword_error; ?></span>
+						<span class="text-danger"><?php if (isset($cPasswordError)) echo $cPasswordError; ?></span>
 					</div>
 
 					<div class="form-group">
@@ -108,8 +108,8 @@ if (isset($_POST['signup'])) {
 					</div>
 				</fieldset>
 			</form>
-			<span class="text-success"><?php if (isset($successmsg)) { echo $successmsg; } ?></span>
-			<span class="text-danger"><?php if (isset($errormsg)) { echo $errormsg; } ?></span>
+			<span class="text-success"><?php if (isset($successMsg)) { echo $successMsg; } ?></span>
+			<span class="text-danger"><?php if (isset($errorMsg)) { echo $errorMsg; } ?></span>
 		</div>
 	</div>
 	<div class="row">
